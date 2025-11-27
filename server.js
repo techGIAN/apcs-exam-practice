@@ -1,24 +1,26 @@
+// server.js
 const express = require('express');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const bodyParser = require('body-parser');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const PASSWORD = process.env.SUBMIT_PASSWORD || 'password';
+const SUBMIT_PASSWORD = process.env.SUBMIT_PASSWORD || 'exam123';
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// In-memory token to allow one-time submission after password verification
-let tokenStore = new Set();
+// In-memory token store for reusable tokens
+const validTokens = new Set();
 
-// Verify password
+// Endpoint to verify password and generate a reusable token
 app.post('/verify-password', (req, res) => {
   const { password } = req.body;
-  if (password === PASSWORD) {
-    const token = Math.random().toString(36).substr(2);
-    tokenStore.add(token);
+  if (password === SUBMIT_PASSWORD) {
+    const token = crypto.randomBytes(16).toString('hex');
+    validTokens.add(token); // token valid for multiple submissions
     res.json({ ok: true, token });
   } else {
     res.json({ ok: false });
@@ -28,29 +30,26 @@ app.post('/verify-password', (req, res) => {
 // Submit endpoint
 app.post('/submit', (req, res) => {
   const { token, name, questions } = req.body;
-  if (!token || !tokenStore.has(token)) return res.json({ ok:false, error: 'Invalid or expired token.' });
+  if (!validTokens.has(token)) return res.json({ ok: false, error: 'Invalid token' });
 
-  const entry = {
-    name: String(name).trim(),
-    time: new Date().toISOString(),
-    questions: questions || {}
-  };
+  // Save submission to submissions.json
+  const submissionsFile = path.join(__dirname, 'submissions.json');
+  let submissions = [];
+  if (fs.existsSync(submissionsFile)) {
+    submissions = JSON.parse(fs.readFileSync(submissionsFile, 'utf8'));
+  }
+  const entry = { name, time: new Date().toISOString(), questions };
+  submissions.push(entry);
+  fs.writeFileSync(submissionsFile, JSON.stringify(submissions, null, 2));
 
-  const filePath = path.join(__dirname, 'submissions.json');
-  let arr = [];
-  if (fs.existsSync(filePath)) { arr = JSON.parse(fs.readFileSync(filePath,'utf8')) || []; }
-  arr.push(entry);
-  fs.writeFileSync(filePath, JSON.stringify(arr, null, 2), 'utf8');
-
-  tokenStore.delete(token);
   res.json({ ok: true });
 });
 
-// Admin endpoint to download submissions
+// Admin endpoint to download submissions.json
 app.get('/admin/download', (req, res) => {
-  const filePath = path.join(__dirname, 'submissions.json');
-  if (!fs.existsSync(filePath)) return res.status(404).send('No submissions yet');
-  res.download(filePath, 'submissions.json');
+  const submissionsFile = path.join(__dirname, 'submissions.json');
+  if (!fs.existsSync(submissionsFile)) return res.status(404).send('No submissions yet');
+  res.download(submissionsFile, 'submissions.json');
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
