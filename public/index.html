@@ -1,130 +1,105 @@
-<!-- public/index.html -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>AP CS A — Practice Submission</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body { font-family: Arial, sans-serif; background:#f7f7f7; padding:30px; }
-    .card { max-width:900px; margin: 0 auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
-    label { display:block; margin-top:10px; font-weight:600; }
-    input[type="text"], textarea { width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; font-family: monospace; font-size:14px; box-sizing:border-box; }
-    textarea { height:360px; resize:vertical; }
-    button { margin-top:12px; padding:10px 16px; border:none; background:#007bff; color:white; border-radius:6px; cursor:pointer; font-size:16px; }
-    .msg { margin-top:12px; padding:10px; border-radius:6px; display:none; }
-    .msg.success { background:#e6ffed; color:#0a7a2b; display:none; }
-    .msg.error { background:#ffe6e6; color:#b60c0c; display:none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP CS A - Midterm Exam Submission</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .question { margin-bottom: 20px; }
+  textarea { width: 100%; height: 150px; font-family: monospace; font-size: 14px; }
+  #submit-btn { padding: 10px 20px; font-size: 16px; }
+  #toast { display: none; position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 10px; border-radius: 5px; }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h2>AP CS A — Practice Submission</h2>
+<h1>AP CS A - Midterm Exam Submission</h1>
 
-    <div id="formArea" style="display:none;">
-      <label for="studentName">Your name</label>
-      <input id="studentName" type="text" placeholder="First Last or student ID">
+<div>
+  <label>Name: <input type="text" id="student-name"></label>
+</div>
 
-      <label for="codeArea">Type your Java code (TAB inserts indentation)</label>
-      <textarea id="codeArea" placeholder="Type Java code here..."></textarea>
+<div class="question">
+  <label>Question 1a</label>
+  <textarea id="q1a"></textarea>
+</div>
+<div class="question">
+  <label>Question 1b</label>
+  <textarea id="q1b"></textarea>
+</div>
+<div class="question">
+  <label>Question 2a</label>
+  <textarea id="q2a"></textarea>
+</div>
+<div class="question">
+  <label>Question 2b</label>
+  <textarea id="q2b"></textarea>
+</div>
+<div class="question">
+  <label>Question 3</label>
+  <textarea id="q3"></textarea>
+</div>
 
-      <button id="submitBtn">Submit</button>
-
-      <div id="successMsg" class="msg success">Submission sent. Thank you!</div>
-      <div id="errorMsg" class="msg error">Error sending submission.</div>
-    </div>
-
-    <div id="loading" style="margin-top:10px;">Initializing…</div>
-  </div>
+<button id="submit-btn">Submit</button>
+<div id="toast">Submission successful!</div>
 
 <script>
-(async function init() {
-  // On load, prompt for password until backend accepts it.
-  // We'll store a temporary token returned by the backend to authorize the submit.
-  let token = null;
-
-  async function checkPassword(pw) {
-    try {
-      const r = await fetch('/check', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pw })
-      });
-      return await r.json(); // { ok: true, token: "..." } or { ok:false }
-    } catch (e) { return { ok: false }; }
-  }
-
-  // Loop until correct
-  while (!token) {
-    const pw = prompt('Enter exam password:');
-    // user cancelled prompt -> ask again (exam requirement)
-    if (pw === null) {
-      // continue loop and re-prompt
-      continue;
-    }
-
-    document.getElementById('loading').textContent = 'Checking password…';
-    const result = await checkPassword(pw);
-    if (result && result.ok && result.token) {
-      token = result.token;
-      break;
-    } else {
-      alert('Incorrect password — please try again.');
-    }
-  }
-
-  // Show form
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('formArea').style.display = 'block';
-
-  // Enable TAB indent inside textarea
-  const textarea = document.getElementById('codeArea');
+function addTabHandler(textarea) {
   textarea.addEventListener('keydown', function(e) {
     if (e.key === 'Tab') {
       e.preventDefault();
       const start = this.selectionStart;
       const end = this.selectionEnd;
-      // set textarea value to: text before caret + tab + text after caret
-      this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
-      // put caret at right position
-      this.selectionStart = this.selectionEnd = start + 1;
+      this.value = this.value.substring(0, start) + '  ' + this.value.substring(end); // 2 spaces
+      this.selectionStart = this.selectionEnd = start + 2;
     }
   });
+}
+['q1a','q1b','q2a','q2b','q3'].forEach(id => {
+  addTabHandler(document.getElementById(id));
+});
 
-  // Submit handler
-  document.getElementById('submitBtn').addEventListener('click', async function() {
-    const name = document.getElementById('studentName').value.trim();
-    const code = document.getElementById('codeArea').value;
+async function getPasswordToken() {
+  let token = null;
+  while (!token) {
+    const pwd = prompt('Enter exam password:');
+    if (pwd === null) continue;
+    const res = await fetch('/verify-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    const data = await res.json();
+    if (data.ok) token = data.token;
+    else alert('Incorrect password, try again.');
+  }
+  return token;
+}
 
-    if (!name) { alert('Please enter your name.'); return; }
-    if (!code.trim()) { alert('Please enter your Java code.'); return; }
-
-    // hide messages
-    document.getElementById('successMsg').style.display = 'none';
-    document.getElementById('errorMsg').style.display = 'none';
-
-    // send to backend with token
-    try {
-      const r = await fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: token, name: name, code: code })
-      });
-      const json = await r.json();
-      if (json && json.ok) {
-        document.getElementById('successMsg').style.display = 'block';
-        // optional: clear code (or leave it)
-        // textarea.value = '';
-      } else {
-        document.getElementById('successMsg').style.display = 'none';
-        document.getElementById('errorMsg').style.display = 'block';
-      }
-    } catch (err) {
-      document.getElementById('errorMsg').textContent = 'Network error.';
-      document.getElementById('errorMsg').style.display = 'block';
-    }
+document.getElementById('submit-btn').addEventListener('click', async () => {
+  const token = await getPasswordToken();
+  const name = document.getElementById('student-name').value.trim();
+  const questions = {
+    '1a': document.getElementById('q1a').value,
+    '1b': document.getElementById('q1b').value,
+    '2a': document.getElementById('q2a').value,
+    '2b': document.getElementById('q2b').value,
+    '3': document.getElementById('q3').value
+  };
+  const res = await fetch('/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, name, questions })
   });
-})();
+  const data = await res.json();
+  if (data.ok) {
+    const toast = document.getElementById('toast');
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 3000);
+  } else {
+    alert('Submission failed: ' + (data.error||'Unknown error'));
+  }
+});
 </script>
 </body>
 </html>
