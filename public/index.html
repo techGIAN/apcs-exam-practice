@@ -72,7 +72,7 @@
   .instructions .highlight { color: red; font-weight: bold; }
 
   .question-text {
-  background: #f7f7f7;
+  background: #fffefe;
   padding: 12px;
   border-left: 4px solid #28a745;
   margin-bottom: 12px;
@@ -82,9 +82,17 @@
 .question-text code {
   font-family: monospace;
 }
+
+pre {
+  margin: 2px 0;
+  padding: 4px 6px;
+  line-height: 1.2;
+}
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
 </head>
 <body>
 <h2>AP CS A - Practice Exam Free Response Submission</h2>
@@ -126,7 +134,7 @@
     <br><br>
     See below for an example:
     <pre><code class="language-java">
-    System.out.println("Hello Mr. Alix!");
+System.out.println("Hello Mr. Alix!");
     </code></pre>
   </div>
   <textarea id="q1a"></textarea>
@@ -147,8 +155,8 @@
     <br><br>
     See below for an example:
     <pre><code class="language-java">
-    int number = 67;
-    boolean isEven = even(number);    // false
+int number = 67;
+boolean isEven = even(number);    // false
     </code></pre>
   </div>
   <textarea id="q2a"></textarea>
