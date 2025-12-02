@@ -76,11 +76,11 @@
 <h2>AP CS A - Practice Exam Free Response Submission</h2>
 
 <div class="tabs">
-  <div class="tab active" data-tab="hometab">Home</div>
-  <div class="tab disabled" data-tab="q1tab">Question 1</div>
-  <div class="tab disabled" data-tab="q2tab">Question 2</div>
-  <div class="tab disabled" data-tab="q3tab">Question 3</div>
-  <div class="tab disabled" data-tab="submittab">Submit</div>
+  <div class="tab active" data-tab="home">Home</div>
+  <div class="tab disabled" data-tab="q1">Question 1</div>
+  <div class="tab disabled" data-tab="q2">Question 2</div>
+  <div class="tab disabled" data-tab="q3">Question 3</div>
+  <div class="tab disabled" data-tab="submit">Submit</div>
 </div>
 
 <!-- HOME TAB -->
@@ -111,7 +111,7 @@
   <h3>Question 1b</h3>
   <textarea id="q1b"></textarea>
   <br><br>
-  <button class="green" onclick="saveWork('q1'); goToTab('q2tab')">Save & Next</button>
+  <button class="green" onclick="saveWork('q1'); goToTab('q2')">Save & Next</button>
 </div>
 
 <!-- QUESTION 2 -->
@@ -121,15 +121,15 @@
   <h3>Question 2b</h3>
   <textarea id="q2b"></textarea>
   <br><br>
-  <button class="green" onclick="saveWork('q2'); goToTab('q3tab')">Save & Next</button>
+  <button class="green" onclick="saveWork('q2'); goToTab('q3')">Save & Next</button>
 </div>
 
 <!-- QUESTION 3 -->
 <div id="q3" class="section">
   <h3>Question 3</h3>
-  <textarea id="q3" class="large"></textarea>
+  <textarea id="q3text" class="large"></textarea>
   <br><br>
-  <button class="green" onclick="saveWork('q3'); goToTab('submittab')">Save & Next</button>
+  <button class="green" onclick="saveWork('q3'); goToTab('submit')">Save & Next</button>
 </div>
 
 <!-- SUBMIT TAB -->
@@ -190,7 +190,7 @@ document.getElementById('start-btn').addEventListener('click', () => {
     });
   });
 
-  goToTab('q1tab');
+  goToTab('q1');
 });
 
 /* -------------------------------
@@ -207,7 +207,7 @@ function addTabHandler(textarea) {
     }
   });
 }
-['q1a','q1b','q2a','q2b','q3'].forEach(id => {
+['q1a','q1b','q2a','q2b','q3text'].forEach(id => {
   addTabHandler(document.getElementById(id));
 });
 
@@ -271,7 +271,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
     '1b': document.getElementById('q1b').value,
     '2a': document.getElementById('q2a').value,
     '2b': document.getElementById('q2b').value,
-    '3': document.getElementById('q3').value
+    '3': document.getElementById('q3text').value
   };
 
   const res = await fetch('/submit', {
