@@ -9,7 +9,13 @@
 
   /* Tabs */
   .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-  .tab { padding: 12px 18px; border: 1px solid #ccc; cursor: pointer; border-radius: 6px; font-weight: bold; }
+  .tab {
+    padding: 12px 18px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+  }
   .tab.disabled { background: #ddd; color: #777; cursor: not-allowed; }
   .tab.active { background: #007bff; color: white; }
 
@@ -22,12 +28,30 @@
   .large { height: 280px; }
 
   /* Green Buttons */
-  button.green { background: #28a745; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; }
+  button.green {
+    background: #28a745;
+    color: white;
+    padding: 12px 26px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
   button.green:hover { background: #218838; }
   button.green:disabled { background: #9acfa3; cursor: not-allowed; }
 
   /* Toast message */
-  #toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 20px; border-radius: 8px; opacity: 0; transition: opacity 0.4s; }
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
 </style>
 </head>
 <body>
@@ -120,15 +144,28 @@ document.getElementById('start-btn').addEventListener('click', () => {
   document.getElementById('student-name').readOnly = true;
   document.getElementById('start-btn').disabled = true;
 
+  /* Enable all tabs */
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('disabled'));
+
+  /* Make tabs clickable now */
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      if (!t.classList.contains('disabled')) {
+        goToTab(t.dataset.tab);
+      }
+    });
+  });
+
   goToTab('q1');
 });
 
 /* CHECKMARK HANDLING */
 function updateCheckmarks() {
+  const labels = { q1:"Question 1", q2:"Question 2", q3:"Question 3" };
+
   ['q1','q2','q3'].forEach(q => {
     const tab = document.querySelector(`[data-tab="${q}"]`);
-    tab.innerHTML = tab.dataset.tab.replace('q','Question ') + (saved[q] ? ' <span class="checkmark">✓</span>' : '');
+    tab.innerHTML = labels[q] + (saved[q] ? ' <span class="checkmark">✓</span>' : '');
   });
 }
 
@@ -139,13 +176,14 @@ function saveWork(section) {
   showToast("Saved!");
 }
 
-/* PASSWORD */
+/* PASSWORD CHECK */
 window.addEventListener('DOMContentLoaded', async () => {
   while (!token) {
     const pwd = prompt('Enter exam password:');
     if (pwd === null) continue;
     const res = await fetch('/verify-password', {
-      method: 'POST', headers: { 'Content-Type':'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ password: pwd })
     });
     const data = await res.json();
@@ -159,12 +197,13 @@ function updateAttestation() {
   const name = document.getElementById('student-name').value.trim();
   document.getElementById('attestation').innerHTML =
     `I, <strong>${name}</strong>, affirm that all work submitted is entirely my own. ` +
-    `I understand that I may revise and resubmit multiple times before time ends. Only the last submission counts.`;
+    `I understand that I may review, revise, and resubmit multiple times before the time ends. ` +
+    `Only the final submission will be considered.`;
 }
 
 /* FINAL SUBMIT */
 document.getElementById('submit-btn').addEventListener('click', async () => {
-  showToast("You may continue to revise and resubmit until time ends. Only the last submission counts.");
+  showToast("Submitted! You may still revise & resubmit until the time ends.");
 });
 </script>
 </body>
