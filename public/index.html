@@ -193,6 +193,24 @@ document.getElementById('start-btn').addEventListener('click', () => {
   goToTab('q1');
 });
 
+/* -------------------------------
+   TAB KEY HANDLER
+--------------------------------*/
+function addTabHandler(textarea) {
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      this.value = this.value.substring(0, start) + "  " + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = start + 2;
+    }
+  });
+}
+['q1a','q1b','q2a','q2b','q3'].forEach(id => {
+  addTabHandler(document.getElementById(id));
+});
+
 /* CHECKMARK HANDLING */
 function updateCheckmarks() {
   const labels = { q1:"Question 1", q2:"Question 2", q3:"Question 3" };
