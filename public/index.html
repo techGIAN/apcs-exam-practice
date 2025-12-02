@@ -82,11 +82,28 @@
 .question-text code {
   font-family: monospace;
 }
-
+/*
 pre {
   margin: 2px 0;
   padding: 4px 6px;
   line-height: 1.2;
+}
+  */
+  pre {
+  margin: 4px 0 !important;      /* Tight vertical margin */
+  padding: 4px !important;        /* Small internal padding */
+  border-radius: 6px;             /* Optional */
+  background: #f7f7f7;            /* Optional light background */
+}
+
+pre code {
+  padding: 0 !important;          /* Remove double padding */
+}
+
+pre, code {
+  font-family: monospace !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;   /* Optional; helps reduce vertical height */
 }
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
