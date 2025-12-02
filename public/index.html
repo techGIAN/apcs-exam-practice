@@ -17,7 +17,7 @@
     font-weight: bold;
   }
   .tab.disabled { background: #ddd; color: #777; cursor: not-allowed; }
-  .tab.active { background: #007bff; color: white; }
+  .tab.active { background: #ccc; color: white; }
 
   .checkmark { color: green; font-weight: bold; margin-left: 6px; }
 
@@ -52,6 +52,10 @@
     opacity: 0;
     transition: opacity 0.4s;
   }
+
+  .instructions { margin: 15px 0; font-size: 14px; line-height: 1.5; }
+  .instructions strong { color: red; }
+  .instructions .highlight { color: red; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -70,6 +74,19 @@
   <h3>Enter Your Full Name</h3>
   <input type="text" id="student-name" style="font-size:16px; padding:6px; width:50%;" />
   <br><br>
+  <div class="instructions">
+    <span class="highlight">READ CAREFULLY THESE INSTRUCTIONS BEFORE STARTING WITH THIS SECTION OF THE EXAM</span><br>
+    <ol>
+      <li>Make sure to write your full name above.</li>
+      <li>Once ready, click on the button below to begin.</li>
+      <li>Use the tabs above to navigate through the questions, which you may do in any order.</li>
+      <li><span class="highlight">DO NOT click "Back", "Refresh" or close the window/tab at any time until you have clicked "Submit" on the last tab.</span></li>
+      <li>Ensure you click on "Save & Next" for each question that you solve - you will see a check mark beside the question number, indicating that you have solved it. </li>
+      <li>You may submit your work multiple times, but only the last submission will count.</li>
+      <li>Once you finish ahead of time, review your answers and click "Submit". If there is extra time left, you can review, revise and resubmit your work.</li>
+    </ol>
+  </div>
+
   <button id="start-btn" class="green" disabled>Go to Questions</button>
 </div>
 
@@ -79,6 +96,7 @@
   <textarea id="q1a"></textarea>
   <h3>Question 1b</h3>
   <textarea id="q1b"></textarea>
+  <br><br>
   <button class="green" onclick="saveWork('q1'); goToTab('q2')">Save & Next</button>
 </div>
 
@@ -88,6 +106,7 @@
   <textarea id="q2a"></textarea>
   <h3>Question 2b</h3>
   <textarea id="q2b"></textarea>
+  <br><br>
   <button class="green" onclick="saveWork('q2'); goToTab('q3')">Save & Next</button>
 </div>
 
@@ -95,6 +114,7 @@
 <div id="q3" class="section">
   <h3>Question 3</h3>
   <textarea id="q3txt" class="large"></textarea>
+  <br><br>
   <button class="green" onclick="saveWork('q3'); goToTab('submit')">Save & Next</button>
 </div>
 
