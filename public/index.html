@@ -23,11 +23,21 @@
   label { font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px; }
   textarea { width: 100%; height: 150px; font-family: monospace; font-size: 14px; }
 
-  /* Larger textarea for Q3 */
+  /* Larger textarea for Question 3 */
   #q3 { height: 300px; }
 
-  #submit-btn, .save-btn {
-    padding: 10px 20px; font-size: 16px; margin-top: 20px;
+  /* Green Buttons */
+  button.save-btn,
+  #submit-btn,
+  .tab-buttons button.action {
+    background: #28a745;
+    color: white;
+    border: none;
+  }
+  button.save-btn:hover,
+  #submit-btn:hover,
+  .tab-buttons button.action:hover {
+    background: #218838;
   }
 
   /* Toast */
@@ -49,9 +59,9 @@
 <!-- TABS -->
 <div class="tab-buttons">
   <button class="tab-btn active" data-tab="home">Home</button>
-  <button class="tab-btn" data-tab="tab1">1a–1b</button>
-  <button class="tab-btn" data-tab="tab2">2a–2b</button>
-  <button class="tab-btn" data-tab="tab3">3</button>
+  <button class="tab-btn" data-tab="tab1">Question 1</button>
+  <button class="tab-btn" data-tab="tab2">Question 2</button>
+  <button class="tab-btn" data-tab="tab3">Question 3</button>
   <button class="tab-btn" data-tab="submit">Submit</button>
 </div>
 
@@ -68,7 +78,7 @@
     5. Make sure to click <strong>Submit</strong> at least once before the time ends. No extra time is given for submitting work.
   </div>
 
-  <button class="save-btn" onclick="goTo('tab1')">Go to Questions</button>
+  <button class="save-btn" onclick="attemptStart()">Go to Questions</button>
 </div>
 
 <!-- TAB 1 -->
@@ -113,13 +123,9 @@
 
 <!-- SUBMIT TAB -->
 <div id="submit" class="tab">
-  <p style="font-size: 15px; line-height: 1.5;">
-    By clicking **Submit** below, I affirm that all work submitted is entirely my own.
-    I have not used notes, textbooks, websites, AI systems, or received help from any
-    other person. I understand that any violation of academic honesty policies
-    may result in a failing grade or further disciplinary action.
+  <p id="attestation" style="font-size: 15px; line-height: 1.5;">
+    <!-- Filled in by JS -->
   </p>
-
   <button id="submit-btn">Submit</button>
 </div>
 
@@ -127,7 +133,7 @@
 
 <script>
 /* -------------------------------
-   TAB SWITCHING
+   TAB SWITCHING + NAME CHECK
 --------------------------------*/
 function goTo(tabName) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -135,10 +141,29 @@ function goTo(tabName) {
 
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+
+  updateAttestationText();
 }
 
+function attemptStart() {
+  const name = document.getElementById('student-name').value.trim();
+  if (!name) return alert("Please enter your full name before continuing.");
+  goTo('tab1');
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    if (tab !== "home") {
+      const name = document.getElementById('student-name').value.trim();
+      if (!name) return alert("Please enter your full name before accessing questions.");
+    }
+    goTo(tab);
+  });
+});
+
 /* -------------------------------
-   TAB BEHAVIOR - TAB KEY HANDLER
+   TAB KEY HANDLER
 --------------------------------*/
 function addTabHandler(textarea) {
   textarea.addEventListener('keydown', function(e) {
@@ -146,8 +171,7 @@ function addTabHandler(textarea) {
       e.preventDefault();
       const start = this.selectionStart;
       const end = this.selectionEnd;
-      this.value =
-        this.value.substring(0, start) + "  " + this.value.substring(end);
+      this.value = this.value.substring(0, start) + "  " + this.value.substring(end);
       this.selectionStart = this.selectionEnd = start + 2;
     }
   });
@@ -157,15 +181,12 @@ function addTabHandler(textarea) {
 });
 
 /* -------------------------------
-   SAVE & NEXT (local save only)
+   Save work (no server call)
 --------------------------------*/
 function saveWork() {
   showToast("Saved!");
-
-  // does nothing else — answers stay in the textareas
 }
 
-/* Toast */
 function showToast(msg) {
   const toast = document.getElementById('toast');
   toast.innerText = msg;
@@ -193,7 +214,19 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 /* -------------------------------
-   FINAL SUBMIT TO SERVER
+   Attestation updates with name
+--------------------------------*/
+function updateAttestationText() {
+  const name = document.getElementById('student-name').value.trim() || "(your name)";
+  document.getElementById("attestation").innerHTML =
+    `I, <strong>${name}</strong>, affirm that all work submitted is entirely my own. 
+     I have not used notes, textbooks, websites, AI systems, or received help from any 
+     other person. I understand that any violation of academic honesty policies may result 
+     in a failing grade or further disciplinary action.`;
+}
+
+/* -------------------------------
+   FINAL SUBMIT
 --------------------------------*/
 document.getElementById('submit-btn').addEventListener('click', async () => {
   if (!token) return alert('No valid token.');
