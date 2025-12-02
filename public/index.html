@@ -83,6 +83,8 @@
   font-family: monospace;
 }
 </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 </head>
 <body>
 <h2>AP CS A - Practice Exam Free Response Submission</h2>
@@ -123,12 +125,14 @@
     Write a one-line program for printing <strong>"Hello [your name]!"</strong>.
     <br><br>
     See below for an example:
-    <pre><code>System.out.println("Hello Mr. Alix!");</code></pre>
+    <pre><code class="language-java">
+    System.out.println("Hello Mr. Alix!");
+    </code></pre>
   </div>
   <textarea id="q1a"></textarea>
   <h3>Question 1b</h3>
   <div class="question-text">
-    Write one fact aboout yourself, but must be stored in a <code>String</code> variable called <code>fact</code>.
+    Write one fact aboout yourself, but must be stored in a <code class="language-java">String</code> variable called <code>fact</code>.
   </div>
   <textarea id="q1b"></textarea>
   <br><br>
@@ -139,15 +143,13 @@
 <div id="q2" class="section">
   <h3>Question 2a</h3>
   <div class="question-text">
-    Write a method called <code>even</code> that returns <code>true</code> if its argument is a multiple of <code>2</code> and <code>false</code> otherwise.
+    Write a method called <code>even</code> that returns <code class="language-java">true</code> if its argument is a multiple of <code class="language-java">2</code> and <code class="language-java">false</code> otherwise.
     <br><br>
     See below for an example:
-    <pre>
-      <code>
-        int number = 67;
-        boolean isEven = even(number);    // false
-      </code>
-    </pre>
+    <pre><code class="language-java">
+    int number = 67;
+    boolean isEven = even(number);    // false
+    </code></pre>
   </div>
   <textarea id="q2a"></textarea>
   <h3>Question 2b</h3>
@@ -161,10 +163,10 @@
 
 <!-- QUESTION 3 -->
 <div id="q3" class="section">
+  <h3>Question 3</h3>
   <div class="question-text">
     Write a class called <code>Coin</code> with an attribute called <code>heads</code> - that determines if the coin is heads or tails. The coin must be flipped upon creating a <code>Coin</code> object.
   </div>
-  <h3>Question 3</h3>
   <textarea id="q3text" class="large"></textarea>
   <br><br>
   <button class="green" onclick="saveWork('q3'); goToTab('submit')">Save & Next</button>
