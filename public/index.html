@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Midterm Exam Free Response Submission</title>
+<title>AP CS A - Practice Exam Free Response Submission</title>
 <style>
   body { font-family: Arial, sans-serif; padding: 20px; }
 
@@ -73,7 +73,7 @@
 </style>
 </head>
 <body>
-<h2>Midterm Exam Free Response Submission</h2>
+<h2>AP CS A - Practice Exam Free Response Submission</h2>
 
 <div class="tabs">
   <div class="tab active" data-tab="home">Home</div>
@@ -231,13 +231,40 @@ function updateAttestation() {
   const name = document.getElementById('student-name').value.trim();
   document.getElementById('attestation').innerHTML =
     `I, <strong>${name}</strong>, affirm that all work submitted is entirely my own. ` +
-    `I understand that I may review, revise, and resubmit multiple times before the time ends. ` +
-    `Only the final submission will be considered.`;
+    `I have not used notes, textbooks, websites, AI systems, or received help from any 
+     other person. I understand that any violation of academic honesty policies may result 
+     in a failing grade or further disciplinary action`;
 }
 
-/* FINAL SUBMIT */
+// /* FINAL SUBMIT */
+// document.getElementById('submit-btn').addEventListener('click', async () => {
+//   showToast("Submitted! You may still revise & resubmit until the time ends. Only the last submission counts!");
+// });
+
+/* -------------------------------
+   FINAL SUBMIT
+--------------------------------*/
 document.getElementById('submit-btn').addEventListener('click', async () => {
-  showToast("Submitted! You may still revise & resubmit until the time ends.");
+  if (!token) return alert('No valid token.');
+
+  const name = document.getElementById('student-name').value.trim();
+  const questions = {
+    '1a': document.getElementById('q1a').value,
+    '1b': document.getElementById('q1b').value,
+    '2a': document.getElementById('q2a').value,
+    '2b': document.getElementById('q2b').value,
+    '3': document.getElementById('q3').value
+  };
+
+  const res = await fetch('/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, name, questions })
+  });
+
+  const data = await res.json();
+  if (data.ok) showToast("Submitted! You may still revise & resubmit until the time ends. Only the last submission counts!");
+  else alert('Submission failed: ' + (data.error || 'Unknown error'));
 });
 </script>
 </body>
