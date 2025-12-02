@@ -70,6 +70,18 @@
   .instructions { margin: 15px 0; font-size: 14px; line-height: 1.5; }
   .instructions strong { color: red; }
   .instructions .highlight { color: red; font-weight: bold; }
+
+  .question-text {
+  background: #f7f7f7;
+  padding: 12px;
+  border-left: 4px solid #28a745;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.question-text code {
+  font-family: monospace;
+}
 </style>
 </head>
 <body>
@@ -107,8 +119,17 @@
 <!-- QUESTION 1 -->
 <div id="q1" class="section">
   <h3>Question 1a</h3>
+  <div class="question-text">
+    Write a one-line program for printing <strong>"Hello [your name]!"</strong>.
+    <br><br>
+    See below for an example:
+    <pre><code>System.out.println("Hello Mr. Alix!");</code></pre>
+  </div>
   <textarea id="q1a"></textarea>
   <h3>Question 1b</h3>
+  <div class="question-text">
+    Write one fact aboout yourself, but must be stored in a <code>String</code> variable called <code>fact</code>.
+  </div>
   <textarea id="q1b"></textarea>
   <br><br>
   <button class="green" onclick="saveWork('q1'); goToTab('q2')">Save & Next</button>
@@ -117,8 +138,22 @@
 <!-- QUESTION 2 -->
 <div id="q2" class="section">
   <h3>Question 2a</h3>
+  <div class="question-text">
+    Write a method called <code>even</code> that returns <code>true</code> if its argument is a multiple of <code>2</code> and <code>false</code> otherwise.
+    <br><br>
+    See below for an example:
+    <pre>
+      <code>
+        int number = 67;
+        boolean isEven = even(number);    // false
+      </code>
+    </pre>
+  </div>
   <textarea id="q2a"></textarea>
   <h3>Question 2b</h3>
+  <div class="question-text">
+    Write a loop to count how many even integers are greater than <code>a</code> but less than <code>b</code>.
+  </div>
   <textarea id="q2b"></textarea>
   <br><br>
   <button class="green" onclick="saveWork('q2'); goToTab('q3')">Save & Next</button>
@@ -126,6 +161,9 @@
 
 <!-- QUESTION 3 -->
 <div id="q3" class="section">
+  <div class="question-text">
+    Write a class called <code>Coin</code> with an attribute called <code>heads</code> - that determines if the coin is heads or tails. The coin must be flipped upon creating a <code>Coin</code> object.
+  </div>
   <h3>Question 3</h3>
   <textarea id="q3text" class="large"></textarea>
   <br><br>
