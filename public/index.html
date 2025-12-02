@@ -4,67 +4,150 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AP CS A - Midterm Exam Free Response Submission</title>
+
 <style>
   body { font-family: Arial, sans-serif; padding: 20px; }
-  .question { margin-bottom: 20px; }
+
+  /* Tabs */
+  .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+  .tab-buttons button {
+    padding: 10px 15px; cursor: pointer; border: 1px solid #ccc;
+    background: #eee; border-radius: 5px; font-weight: bold;
+  }
+  .tab-buttons button.active { background: #007bff; color: white; }
+
+  .tab { display: none; }
+  .tab.active { display: block; }
+
+  /* Forms */
   label { font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px; }
   textarea { width: 100%; height: 150px; font-family: monospace; font-size: 14px; }
-  #submit-btn { padding: 10px 20px; font-size: 16px; }
-  #toast { display: none; position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 10px; border-radius: 5px; }
+
+  /* Larger textarea for Q3 */
+  #q3 { height: 300px; }
+
+  #submit-btn, .save-btn {
+    padding: 10px 20px; font-size: 16px; margin-top: 20px;
+  }
+
+  /* Toast */
+  #toast {
+    display: none; position: fixed; top: 20px; right: 20px;
+    background: #28a745; color: white; padding: 10px;
+    border-radius: 5px; z-index: 9999;
+  }
+
   .instructions { margin: 15px 0; font-size: 14px; line-height: 1.5; }
   .instructions strong { color: red; }
   .instructions .highlight { color: red; font-weight: bold; }
 </style>
 </head>
+
 <body>
-<h1>AP CS A - Midterm Exam Free Response Submission</h1>
+<h1>Midterm Exam Free Response Submission</h1>
 
-<div>
+<!-- TABS -->
+<div class="tab-buttons">
+  <button class="tab-btn active" data-tab="home">Home</button>
+  <button class="tab-btn" data-tab="tab1">1a–1b</button>
+  <button class="tab-btn" data-tab="tab2">2a–2b</button>
+  <button class="tab-btn" data-tab="tab3">3</button>
+  <button class="tab-btn" data-tab="submit">Submit</button>
+</div>
+
+<!-- HOME TAB -->
+<div id="home" class="tab active">
   <label>Full Name: <input type="text" id="student-name"></label>
+
+  <div class="instructions">
+    <span class="highlight">READ CAREFULLY THESE INSTRUCTIONS BEFORE STARTING WITH THIS SECTION OF THE EXAM</span><br>
+    1. Make sure to write your full name. Work is not graded without your full name.<br>
+    2. Type your solutions for all questions before clicking Submit.<br>
+    3. Feel free to resubmit your work multiple times. Only the last submission counts.<br>
+    4. <span class="highlight">DO NOT click "Back", "Refresh" or close the window/tab until you have clicked on "Submit". Your work will not be saved.</span><br>
+    5. Make sure to click <strong>Submit</strong> at least once before the time ends. No extra time is given for submitting work.
+  </div>
+
+  <button class="save-btn" onclick="goTo('tab1')">Go to Questions</button>
 </div>
 
-<div class="instructions">
-  <span class="highlight">READ CAREFULLY THESE INSTRUCTIONS BEFORE STARTING WITH THIS SECTION OF THE EXAM</span><br>
-  1. Make sure to write your full name. Work is not graded without your full name.<br>
-  2. Type your solutions for all questions before clicking Submit.<br>
-  3. Feel free to resubmit your work multiple times. Only the last submission counts.<br>
-  4. <span class="highlight">DO NOT click "Back", "Refresh" or close the window/tab until you have clicked on "Submit". Your work will not be saved.</span><br>
-  5. Make sure to click <strong>Submit</strong> at least once before the time ends. No extra time is given for submitting work.
+<!-- TAB 1 -->
+<div id="tab1" class="tab">
+  <div class="question">
+    <label>Question 1a</label>
+    <textarea id="q1a"></textarea>
+  </div>
+
+  <div class="question">
+    <label>Question 1b</label>
+    <textarea id="q1b"></textarea>
+  </div>
+
+  <button class="save-btn" onclick="saveWork(); goTo('tab2')">Save & Next</button>
 </div>
 
-<div class="question">
-  <label>Question 1a</label>
-  <textarea id="q1a"></textarea>
-</div>
-<div class="question">
-  <label>Question 1b</label>
-  <textarea id="q1b"></textarea>
-</div>
-<div class="question">
-  <label>Question 2a</label>
-  <textarea id="q2a"></textarea>
-</div>
-<div class="question">
-  <label>Question 2b</label>
-  <textarea id="q2b"></textarea>
-</div>
-<div class="question">
-  <label>Question 3</label>
-  <textarea id="q3"></textarea>
+<!-- TAB 2 -->
+<div id="tab2" class="tab">
+  <div class="question">
+    <label>Question 2a</label>
+    <textarea id="q2a"></textarea>
+  </div>
+
+  <div class="question">
+    <label>Question 2b</label>
+    <textarea id="q2b"></textarea>
+  </div>
+
+  <button class="save-btn" onclick="saveWork(); goTo('tab3')">Save & Next</button>
 </div>
 
-<button id="submit-btn">Submit</button>
-<div id="toast">Submission successful!</div>
+<!-- TAB 3 -->
+<div id="tab3" class="tab">
+  <div class="question">
+    <label>Question 3</label>
+    <textarea id="q3"></textarea>
+  </div>
+
+  <button class="save-btn" onclick="saveWork(); goTo('submit')">Save & Next</button>
+</div>
+
+<!-- SUBMIT TAB -->
+<div id="submit" class="tab">
+  <p style="font-size: 15px; line-height: 1.5;">
+    By clicking **Submit** below, I affirm that all work submitted is entirely my own.
+    I have not used notes, textbooks, websites, AI systems, or received help from any
+    other person. I understand that any violation of academic honesty policies
+    may result in a failing grade or further disciplinary action.
+  </p>
+
+  <button id="submit-btn">Submit</button>
+</div>
+
+<div id="toast">Saved!</div>
 
 <script>
-// Handle TAB for all textareas
+/* -------------------------------
+   TAB SWITCHING
+--------------------------------*/
+function goTo(tabName) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+}
+
+/* -------------------------------
+   TAB BEHAVIOR - TAB KEY HANDLER
+--------------------------------*/
 function addTabHandler(textarea) {
   textarea.addEventListener('keydown', function(e) {
     if (e.key === 'Tab') {
       e.preventDefault();
       const start = this.selectionStart;
       const end = this.selectionEnd;
-      this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+      this.value =
+        this.value.substring(0, start) + "  " + this.value.substring(end);
       this.selectionStart = this.selectionEnd = start + 2;
     }
   });
@@ -73,7 +156,26 @@ function addTabHandler(textarea) {
   addTabHandler(document.getElementById(id));
 });
 
-// Password prompt on page load
+/* -------------------------------
+   SAVE & NEXT (local save only)
+--------------------------------*/
+function saveWork() {
+  showToast("Saved!");
+
+  // does nothing else — answers stay in the textareas
+}
+
+/* Toast */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.style.display = 'block';
+  setTimeout(() => toast.style.display = 'none', 2500);
+}
+
+/* -------------------------------
+   PASSWORD CHECK
+--------------------------------*/
 let token = null;
 window.addEventListener('DOMContentLoaded', async () => {
   while (!token) {
@@ -90,9 +192,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// Submit button
+/* -------------------------------
+   FINAL SUBMIT TO SERVER
+--------------------------------*/
 document.getElementById('submit-btn').addEventListener('click', async () => {
   if (!token) return alert('No valid token.');
+
   const name = document.getElementById('student-name').value.trim();
   const questions = {
     '1a': document.getElementById('q1a').value,
@@ -101,19 +206,16 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
     '2b': document.getElementById('q2b').value,
     '3': document.getElementById('q3').value
   };
+
   const res = await fetch('/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token, name, questions })
   });
+
   const data = await res.json();
-  if (data.ok) {
-    const toast = document.getElementById('toast');
-    toast.style.display = 'block';
-    setTimeout(() => toast.style.display = 'none', 3000);
-  } else {
-    alert('Submission failed: ' + (data.error||'Unknown error'));
-  }
+  if (data.ok) showToast("Submitted!");
+  else alert('Submission failed: ' + (data.error || 'Unknown error'));
 });
 </script>
 </body>
