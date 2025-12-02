@@ -111,7 +111,7 @@
   <h3>Question 1b</h3>
   <textarea id="q1b"></textarea>
   <br><br>
-  <button class="green" onclick="saveWork('q1'); goToTab('q2')">Save & Next</button>
+  <button class="green" onclick="saveWork('q1'); goToTab('q2tab')">Save & Next</button>
 </div>
 
 <!-- QUESTION 2 -->
@@ -121,7 +121,7 @@
   <h3>Question 2b</h3>
   <textarea id="q2b"></textarea>
   <br><br>
-  <button class="green" onclick="saveWork('q2'); goToTab('q3')">Save & Next</button>
+  <button class="green" onclick="saveWork('q2'); goToTab('q3tab')">Save & Next</button>
 </div>
 
 <!-- QUESTION 3 -->
@@ -129,7 +129,7 @@
   <h3>Question 3</h3>
   <textarea id="q3" class="large"></textarea>
   <br><br>
-  <button class="green" onclick="saveWork('q3'); goToTab('submit')">Save & Next</button>
+  <button class="green" onclick="saveWork('q3'); goToTab('submittab')">Save & Next</button>
 </div>
 
 <!-- SUBMIT TAB -->
@@ -190,7 +190,7 @@ document.getElementById('start-btn').addEventListener('click', () => {
     });
   });
 
-  goToTab('q1');
+  goToTab('q1tab');
 });
 
 /* -------------------------------
