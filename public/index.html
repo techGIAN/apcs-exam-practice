@@ -1,210 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AP CS A - Midterm Exam Free Response Submission</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Midterm Exam Free Response Submission</title>
 <style>
   body { font-family: Arial, sans-serif; padding: 20px; }
 
   /* Tabs */
-  .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
-  .tab-buttons button {
-    padding: 10px 15px; cursor: pointer; border: 1px solid #ccc;
-    background: #eee; border-radius: 5px; font-weight: bold;
-  }
-  .tab-buttons button.active { background: #007bff; color: white; }
+  .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+  .tab { padding: 12px 18px; border: 1px solid #ccc; cursor: pointer; border-radius: 6px; font-weight: bold; }
+  .tab.disabled { background: #ddd; color: #777; cursor: not-allowed; }
+  .tab.active { background: #007bff; color: white; }
 
-  .tab { display: none; }
-  .tab.active { display: block; }
+  .checkmark { color: green; font-weight: bold; margin-left: 6px; }
 
-  /* Forms */
-  label { font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px; }
-  textarea { width: 100%; height: 150px; font-family: monospace; font-size: 14px; }
+  .section { display: none; }
+  .active-section { display: block; }
 
-  /* Larger textarea for Question 3 */
-  #q3 { height: 300px; }
+  textarea { width: 100%; height: 140px; margin-top: 10px; font-family: monospace; font-size: 14px; }
+  .large { height: 280px; }
 
   /* Green Buttons */
-  button.save-btn,
-  #submit-btn,
-  .tab-buttons button.action {
-    background: #28a745;
-    color: white;
-    border: none;
-  }
-  button.save-btn:hover,
-  #submit-btn:hover,
-  .tab-buttons button.action:hover {
-    background: #218838;
-  }
+  button.green { background: #28a745; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; }
+  button.green:hover { background: #218838; }
+  button.green:disabled { background: #9acfa3; cursor: not-allowed; }
 
-  /* Toast */
-  #toast {
-    display: none; position: fixed; top: 20px; right: 20px;
-    background: #28a745; color: white; padding: 10px;
-    border-radius: 5px; z-index: 9999;
-  }
-
-  .instructions { margin: 15px 0; font-size: 14px; line-height: 1.5; }
-  .instructions strong { color: red; }
-  .instructions .highlight { color: red; font-weight: bold; }
+  /* Toast message */
+  #toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 20px; border-radius: 8px; opacity: 0; transition: opacity 0.4s; }
 </style>
 </head>
-
 <body>
-<h1>Midterm Exam Free Response Submission</h1>
+<h2>Midterm Exam Free Response Submission</h2>
 
-<!-- TABS -->
-<div class="tab-buttons">
-  <button class="tab-btn active" data-tab="home">Home</button>
-  <button class="tab-btn" data-tab="tab1">Question 1</button>
-  <button class="tab-btn" data-tab="tab2">Question 2</button>
-  <button class="tab-btn" data-tab="tab3">Question 3</button>
-  <button class="tab-btn" data-tab="submit">Submit</button>
+<div class="tabs">
+  <div class="tab active" data-tab="home">Home</div>
+  <div class="tab disabled" data-tab="q1">Question 1</div>
+  <div class="tab disabled" data-tab="q2">Question 2</div>
+  <div class="tab disabled" data-tab="q3">Question 3</div>
+  <div class="tab disabled" data-tab="submit">Submit</div>
 </div>
 
 <!-- HOME TAB -->
-<div id="home" class="tab active">
-  <label>Full Name: <input type="text" id="student-name"></label>
-
-  <div class="instructions">
-    <span class="highlight">READ CAREFULLY THESE INSTRUCTIONS BEFORE STARTING WITH THIS SECTION OF THE EXAM</span><br>
-    1. Make sure to write your full name. Work is not graded without your full name.<br>
-    2. Type your solutions for all questions before clicking Submit.<br>
-    3. Feel free to resubmit your work multiple times. Only the last submission counts.<br>
-    4. <span class="highlight">DO NOT click "Back", "Refresh" or close the window/tab until you have clicked on "Submit". Your work will not be saved.</span><br>
-    5. Make sure to click <strong>Submit</strong> at least once before the time ends. No extra time is given for submitting work.
-  </div>
-
-  <button class="save-btn" onclick="attemptStart()">Go to Questions</button>
+<div id="home" class="section active-section">
+  <h3>Enter Your Full Name</h3>
+  <input type="text" id="student-name" style="font-size:16px; padding:6px; width:50%;" />
+  <br><br>
+  <button id="start-btn" class="green" disabled>Go to Questions</button>
 </div>
 
-<!-- TAB 1 -->
-<div id="tab1" class="tab">
-  <div class="question">
-    <label>Question 1a</label>
-    <textarea id="q1a"></textarea>
-  </div>
-
-  <div class="question">
-    <label>Question 1b</label>
-    <textarea id="q1b"></textarea>
-  </div>
-
-  <button class="save-btn" onclick="saveWork(); goTo('tab2')">Save & Next</button>
+<!-- QUESTION 1 -->
+<div id="q1" class="section">
+  <h3>Question 1a</h3>
+  <textarea id="q1a"></textarea>
+  <h3>Question 1b</h3>
+  <textarea id="q1b"></textarea>
+  <button class="green" onclick="saveWork('q1'); goToTab('q2')">Save & Next</button>
 </div>
 
-<!-- TAB 2 -->
-<div id="tab2" class="tab">
-  <div class="question">
-    <label>Question 2a</label>
-    <textarea id="q2a"></textarea>
-  </div>
-
-  <div class="question">
-    <label>Question 2b</label>
-    <textarea id="q2b"></textarea>
-  </div>
-
-  <button class="save-btn" onclick="saveWork(); goTo('tab3')">Save & Next</button>
+<!-- QUESTION 2 -->
+<div id="q2" class="section">
+  <h3>Question 2a</h3>
+  <textarea id="q2a"></textarea>
+  <h3>Question 2b</h3>
+  <textarea id="q2b"></textarea>
+  <button class="green" onclick="saveWork('q2'); goToTab('q3')">Save & Next</button>
 </div>
 
-<!-- TAB 3 -->
-<div id="tab3" class="tab">
-  <div class="question">
-    <label>Question 3</label>
-    <textarea id="q3"></textarea>
-  </div>
-
-  <button class="save-btn" onclick="saveWork(); goTo('submit')">Save & Next</button>
+<!-- QUESTION 3 -->
+<div id="q3" class="section">
+  <h3>Question 3</h3>
+  <textarea id="q3txt" class="large"></textarea>
+  <button class="green" onclick="saveWork('q3'); goToTab('submit')">Save & Next</button>
 </div>
 
 <!-- SUBMIT TAB -->
-<div id="submit" class="tab">
-  <p id="attestation" style="font-size: 15px; line-height: 1.5;">
-    <!-- Filled in by JS -->
-  </p>
-  <button id="submit-btn">Submit</button>
+<div id="submit" class="section">
+  <h3>Attestation</h3>
+  <p id="attestation" style="font-size:15px; line-height:1.5;"></p>
+  <button id="submit-btn" class="green">Submit</button>
 </div>
 
-<div id="toast">Saved!</div>
+<div id="toast"></div>
 
 <script>
-/* -------------------------------
-   TAB SWITCHING + NAME CHECK
---------------------------------*/
-function goTo(tabName) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(tabName).classList.add('active');
+let saved = { q1:false, q2:false, q3:false };
+let token = null;
 
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
-
-  updateAttestationText();
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = 1;
+  setTimeout(() => t.style.opacity = 0, 2500);
 }
 
-function attemptStart() {
+function goToTab(tab) {
   const name = document.getElementById('student-name').value.trim();
-  if (!name) return alert("Please enter your full name before continuing.");
-  goTo('tab1');
+  if (!name && tab !== "home") return;
+
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-section'));
+  document.getElementById(tab).classList.add('active-section');
+
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+  updateAttestation();
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tab = btn.dataset.tab;
-    if (tab !== "home") {
-      const name = document.getElementById('student-name').value.trim();
-      if (!name) return alert("Please enter your full name before accessing questions.");
-    }
-    goTo(tab);
-  });
+/* HOME TAB LOGIC */
+document.getElementById('student-name').addEventListener('input', () => {
+  const name = document.getElementById('student-name').value.trim();
+  document.getElementById('start-btn').disabled = name === "";
 });
 
-/* -------------------------------
-   TAB KEY HANDLER
---------------------------------*/
-function addTabHandler(textarea) {
-  textarea.addEventListener('keydown', function(e) {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const start = this.selectionStart;
-      const end = this.selectionEnd;
-      this.value = this.value.substring(0, start) + "  " + this.value.substring(end);
-      this.selectionStart = this.selectionEnd = start + 2;
-    }
+document.getElementById('start-btn').addEventListener('click', () => {
+  const name = document.getElementById('student-name').value.trim();
+  if (!name) return;
+
+  document.getElementById('student-name').readOnly = true;
+  document.getElementById('start-btn').disabled = true;
+
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('disabled'));
+  goToTab('q1');
+});
+
+/* CHECKMARK HANDLING */
+function updateCheckmarks() {
+  ['q1','q2','q3'].forEach(q => {
+    const tab = document.querySelector(`[data-tab="${q}"]`);
+    tab.innerHTML = tab.dataset.tab.replace('q','Question ') + (saved[q] ? ' <span class="checkmark">✓</span>' : '');
   });
 }
-['q1a','q1b','q2a','q2b','q3'].forEach(id => {
-  addTabHandler(document.getElementById(id));
-});
 
-/* -------------------------------
-   Save work (no server call)
---------------------------------*/
-function saveWork() {
+/* SAVE WORK */
+function saveWork(section) {
+  saved[section] = true;
+  updateCheckmarks();
   showToast("Saved!");
 }
 
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.innerText = msg;
-  toast.style.display = 'block';
-  setTimeout(() => toast.style.display = 'none', 2500);
-}
-
-/* -------------------------------
-   PASSWORD CHECK
---------------------------------*/
-let token = null;
+/* PASSWORD */
 window.addEventListener('DOMContentLoaded', async () => {
   while (!token) {
     const pwd = prompt('Enter exam password:');
     if (pwd === null) continue;
     const res = await fetch('/verify-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ password: pwd })
     });
     const data = await res.json();
@@ -213,42 +154,17 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-/* -------------------------------
-   Attestation updates with name
---------------------------------*/
-function updateAttestationText() {
-  const name = document.getElementById('student-name').value.trim() || "(your name)";
-  document.getElementById("attestation").innerHTML =
-    `I, <strong>${name}</strong>, affirm that all work submitted is entirely my own. 
-     I have not used notes, textbooks, websites, AI systems, or received help from any 
-     other person. I understand that any violation of academic honesty policies may result 
-     in a failing grade or further disciplinary action.`;
+/* ATTESTATION */
+function updateAttestation() {
+  const name = document.getElementById('student-name').value.trim();
+  document.getElementById('attestation').innerHTML =
+    `I, <strong>${name}</strong>, affirm that all work submitted is entirely my own. ` +
+    `I understand that I may revise and resubmit multiple times before time ends. Only the last submission counts.`;
 }
 
-/* -------------------------------
-   FINAL SUBMIT
---------------------------------*/
+/* FINAL SUBMIT */
 document.getElementById('submit-btn').addEventListener('click', async () => {
-  if (!token) return alert('No valid token.');
-
-  const name = document.getElementById('student-name').value.trim();
-  const questions = {
-    '1a': document.getElementById('q1a').value,
-    '1b': document.getElementById('q1b').value,
-    '2a': document.getElementById('q2a').value,
-    '2b': document.getElementById('q2b').value,
-    '3': document.getElementById('q3').value
-  };
-
-  const res = await fetch('/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token, name, questions })
-  });
-
-  const data = await res.json();
-  if (data.ok) showToast("Submitted!");
-  else alert('Submission failed: ' + (data.error || 'Unknown error'));
+  showToast("You may continue to revise and resubmit until time ends. Only the last submission counts.");
 });
 </script>
 </body>
